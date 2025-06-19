@@ -3,31 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>FLATLINE</title>
+  <title>FLATLINE Web Widget</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <main class="container">
-    <h1 class="title">FLATLINE</h1>
+  <div class="widget-container">
+    <h1 class="widget-title">FLATLINE</h1>
+    <p class="widget-subtitle">NEUTRALIZE YOUR MIX</p>
+
     <div class="upload-group">
-      <label for="fileUpload" class="upload-label">
-        <img src="Upload.png" alt="Upload" class="icon" />
-        <span id="fileName">Choose file</span>
+      <label for="fileUpload" class="upload-button">
+        <img src="Upload.png" alt="Upload" />
+        Choose File
       </label>
-      <input type="file" id="fileUpload" hidden />
+      <input type="file" id="fileUpload" accept=".wav,.mp3,.flac,.aiff" hidden />
+      <span id="fileName" class="file-name">No file selected</span>
     </div>
 
-    <div class="button-group">
-      <button id="processBtn">Neutralize</button>
-      <button id="downloadBtn" class="hidden">Download</button>
-    </div>
+    <button id="processBtn" class="neutralize-button">NEUTRALIZE</button>
 
     <div id="progressBar" class="progress-bar hidden">
       <div id="progressFill" class="progress-fill"></div>
     </div>
+    <div id="statusText" class="status-text"></div>
 
-    <p id="statusText"></p>
-  </main>
+    <button id="downloadBtn" class="download-button hidden">
+      <img src="icon.png" alt="Download" />
+      DOWNLOAD
+    </button>
+  </div>
 
   <script src="script.js"></script>
 </body>
