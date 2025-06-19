@@ -3,43 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>FLATLINE — Spectral Neutralizer</title>
+  <title>FLATLINE</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="panel">
-    <header class="top-bar">
-      <h1 class="title">FLATLINE</h1>
-      <div class="signal">
-        <div class="led blue"></div>
-        <div class="led amber"></div>
-        <span>SIGNAL</span>
-      </div>
-    </header>
-
-    <div class="upload-label">
-      <img src="Upload.png" alt="Upload Icon" class="upload-icon" />
-      <span>UPLOAD FILE</span>
+  <main class="container">
+    <h1 class="title">FLATLINE</h1>
+    <div class="upload-group">
+      <label for="fileUpload" class="upload-label">
+        <img src="Upload.png" alt="Upload" class="icon" />
+        <span id="fileName">Choose file</span>
+      </label>
+      <input type="file" id="fileUpload" hidden />
     </div>
 
-    <label class="filename-bar" for="fileInput">
-      <input type="file" id="fileInput" hidden />
-      <span id="fileName">FILENAME.WAV</span>
-    </label>
-
-    <button id="processBtn" class="button">NEUTRALIZE</button>
-
-    <div class="processing-box" id="processingBox" style="display: none;">
-      <span>PROCESSING...</span>
-      <div class="progress-bar">
-        <div class="progress-fill" id="progressFill"></div>
-      </div>
+    <div class="button-group">
+      <button id="processBtn">Neutralize</button>
+      <button id="downloadBtn" class="hidden">Download</button>
     </div>
 
-    <a id="downloadBtn" class="download-icon" download="flatlined.wav" style="display: none;">
-      <img src="icon.png" alt="Download Icon" />
-    </a>
-  </div>
+    <div id="progressBar" class="progress-bar hidden">
+      <div id="progressFill" class="progress-fill"></div>
+    </div>
+
+    <p id="statusText"></p>
+  </main>
 
   <script src="script.js"></script>
 </body>
