@@ -1,83 +1,58 @@
-// script.js
+const fileInput = document.getElementById("fileInput");
+const filenameDisplay = document.getElementById("filenameDisplay");
+const neutralizeBtn = document.getElementById("neutralizeBtn");
+const progressBar = document.getElementById("progressFill");
+const downloadBtn = document.getElementById("downloadBtn");
 
-document.addEventListener("DOMContentLoaded", () => {
-  const fileInput = document.getElementById("fileInput");
-  const uploadBtn = document.getElementById("uploadBtn");
-  const progressBar = document.getElementById("progressBar");
-  const progressFill = document.getElementById("progressFill");
-  const downloadBtn = document.getElementById("downloadBtn");
-  const fileNameDisplay = document.getElementById("fileName");
+let selectedFile = null;
+let downloadUrl = null;
 
-  let downloadUrl = null;
+// Show filename when user selects a file
+fileInput.addEventListener("change", () => {
+  selectedFile = fileInput.files[0];
+  filenameDisplay.textContent = selectedFile ? selectedFile.name : "No file selected.";
+  downloadBtn.style.display = "none";
+  progressBar.style.width = "0%";
+});
 
-  fileInput.addEventListener("change", () => {
-    const file = fileInput.files[0];
-    if (file) {
-      fileNameDisplay.textContent = file.name;
-      downloadBtn.disabled = true;
-      downloadBtn.style.opacity = 0.5;
-    } else {
-      fileNameDisplay.textContent = "No file selected";
-    }
-  });
+// Trigger processing
+neutralizeBtn.addEventListener("click", () => {
+  if (!selectedFile) {
+    alert("Please choose a file first.");
+    return;
+  }
 
-  uploadBtn.addEventListener("click", () => {
-    const file = fileInput.files[0];
+  const formData = new FormData();
+  formData.append("file", selectedFile);
 
-    if (!file) {
-      alert("Choose file first...");
-      return;
-    }
+  neutralizeBtn.disabled = true;
+  neutralizeBtn.textContent = "Processing...";
+  progressBar.style.transition = "width 0.3s ease-in-out";
+  progressBar.style.width = "30%";
 
-    const formData = new FormData();
-    formData.append("file", file);
-
-    progressBar.style.display = "block";
-    progressFill.style.width = "0%";
-
-    // Simulate progress while processing
-    let progress = 0;
-    const interval = setInterval(() => {
-      if (progress < 90) {
-        progress += 5;
-        progressFill.style.width = `${progress}%`;
+  fetch("https://flatline-api-beta.onrender.com/process", {
+    method: "POST",
+    body: formData,
+  })
+    .then(async (response) => {
+      if (!response.ok) {
+        throw new Error("Processing failed.");
       }
-    }, 200);
+      progressBar.style.width = "70%";
+      const blob = await response.blob();
+      downloadUrl = URL.createObjectURL(blob);
 
-    fetch("https://flatline-api-beta.onrender.com/process", {
-      method: "POST",
-      body: formData,
+      progressBar.style.width = "100%";
+      downloadBtn.style.display = "inline-block";
+      downloadBtn.href = downloadUrl;
+      downloadBtn.download = "neutralized.wav";
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Processing failed");
-        }
-        return response.blob();
-      })
-      .then((blob) => {
-        clearInterval(interval);
-        progressFill.style.width = "100%";
-
-        downloadUrl = URL.createObjectURL(blob);
-        downloadBtn.disabled = false;
-        downloadBtn.style.opacity = 1;
-      })
-      .catch((error) => {
-        clearInterval(interval);
-        console.error("Error:", error);
-        alert("Processing Failed.");
-        progressBar.style.display = "none";
-      });
-  });
-
-  downloadBtn.addEventListener("click", () => {
-    if (!downloadUrl) return;
-
-    const a = document.createElement("a");
-    a.href = downloadUrl;
-    a.download = "neutralized.wav";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-  });
+    .catch((err) => {
+      alert(err.message);
+      progressBar.style.width = "0%";
+    })
+    .finally(() => {
+      neutralizeBtn.disabled = false;
+      neutralizeBtn.textContent = "Neutralize";
+    });
 });
