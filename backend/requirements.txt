@@ -7,3 +7,4 @@ scipy
 librosa
 soundfile
 python-multipart
+pydub
