@@ -23,7 +23,7 @@ body {
   background: var(--bg-metal);
   border-radius: 18px;
   padding: 24px;
-  width: 340px;
+  width: 360px;
   box-shadow: 0 0 6px #0004;
   display: flex;
   flex-direction: column;
@@ -82,10 +82,6 @@ body {
   width: 20px;
 }
 
-input[type="file"] {
-  display: none;
-}
-
 .filename-bar {
   background: var(--black);
   color: var(--amber-soft);
@@ -109,6 +105,11 @@ input[type="file"] {
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   text-transform: uppercase;
+  transition: transform 0.1s ease;
+}
+
+.button:hover {
+  transform: scale(1.02);
 }
 
 .processing-box {
