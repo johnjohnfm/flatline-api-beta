@@ -1,58 +1,79 @@
-const fileInput = document.getElementById("fileInput");
-const filenameDisplay = document.getElementById("filenameDisplay");
-const neutralizeBtn = document.getElementById("neutralizeBtn");
-const progressBar = document.getElementById("progressFill");
-const downloadBtn = document.getElementById("downloadBtn");
+// script.js
 
-let selectedFile = null;
-let downloadUrl = null;
+document.addEventListener("DOMContentLoaded", () => {
+  const fileInput = document.getElementById("fileInput");
+  const uploadBtn = document.getElementById("uploadBtn");
+  const progressBar = document.getElementById("progressBar");
+  const progressFill = document.getElementById("progressFill");
+  const downloadBtn = document.getElementById("downloadBtn");
+  const fileNameDisplay = document.getElementById("fileName");
 
-// Show filename when user selects a file
-fileInput.addEventListener("change", () => {
-  selectedFile = fileInput.files[0];
-  filenameDisplay.textContent = selectedFile ? selectedFile.name : "No file selected.";
-  downloadBtn.style.display = "none";
-  progressBar.style.width = "0%";
-});
+  let downloadUrl = null;
 
-// Trigger processing
-neutralizeBtn.addEventListener("click", () => {
-  if (!selectedFile) {
-    alert("Please choose a file first.");
-    return;
-  }
+  fileInput.addEventListener("change", () => {
+    const file = fileInput.files[0];
+    fileNameDisplay.textContent = file ? file.name : "No file selected";
+    downloadBtn.disabled = true;
+    downloadBtn.style.opacity = 0.5;
+  });
 
-  const formData = new FormData();
-  formData.append("file", selectedFile);
+  uploadBtn.addEventListener("click", () => {
+    const file = fileInput.files[0];
+    if (!file) {
+      alert("Choose a file first...");
+      return;
+    }
 
-  neutralizeBtn.disabled = true;
-  neutralizeBtn.textContent = "Processing...";
-  progressBar.style.transition = "width 0.3s ease-in-out";
-  progressBar.style.width = "30%";
+    const formData = new FormData();
+    formData.append("file", file);
 
-  fetch("https://flatline-api-beta.onrender.com/process", {
-    method: "POST",
-    body: formData,
-  })
-    .then(async (response) => {
-      if (!response.ok) {
-        throw new Error("Processing failed.");
+    progressBar.style.display = "block";
+    progressFill.style.width = "0%";
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "https://flatline-api-beta.onrender.com/process", true);
+
+    xhr.upload.onprogress = (event) => {
+      if (event.lengthComputable) {
+        const percentComplete = (event.loaded / event.total) * 100;
+        progressFill.style.width = `${percentComplete.toFixed(1)}%`;
       }
-      progressBar.style.width = "70%";
-      const blob = await response.blob();
-      downloadUrl = URL.createObjectURL(blob);
+    };
 
-      progressBar.style.width = "100%";
-      downloadBtn.style.display = "inline-block";
-      downloadBtn.href = downloadUrl;
-      downloadBtn.download = "neutralized.wav";
-    })
-    .catch((err) => {
-      alert(err.message);
-      progressBar.style.width = "0%";
-    })
-    .finally(() => {
-      neutralizeBtn.disabled = false;
-      neutralizeBtn.textContent = "Neutralize";
-    });
+    xhr.onload = () => {
+      if (xhr.status === 200) {
+        progressFill.style.width = "100%";
+        const blob = xhr.response;
+        downloadUrl = URL.createObjectURL(blob);
+        downloadBtn.disabled = false;
+        downloadBtn.style.opacity = 1;
+      } else {
+        handleError("Processing Failed.");
+      }
+    };
+
+    xhr.onerror = () => {
+      handleError("An error occurred during upload.");
+    };
+
+    xhr.responseType = "blob";
+    xhr.send(formData);
+  });
+
+  downloadBtn.addEventListener("click", () => {
+    if (downloadUrl) {
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.download = "neutralized.wav";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  });
+
+  function handleError(message) {
+    progressBar.style.display = "none";
+    progressFill.style.width = "0%";
+    alert(message);
+  }
 });
