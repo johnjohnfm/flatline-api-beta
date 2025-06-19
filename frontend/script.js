@@ -28,7 +28,7 @@ processBtn.addEventListener("click", () => {
   const formData = new FormData();
   formData.append("file", selectedFile);
 
-  fetch("https://flatline-api-beta.onrender.com/", {
+  fetch("https://flatline-api-beta.onrender.com/neutralize/", {
     method: "POST",
     body: formData
   })
