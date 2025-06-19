@@ -42,6 +42,7 @@ body {
   font-weight: bold;
   color: var(--black);
   margin: 0;
+  text-transform: uppercase;
 }
 
 .signal {
@@ -74,10 +75,15 @@ body {
   text-transform: uppercase;
   font-weight: bold;
   font-size: 14px;
+  cursor: pointer;
 }
 
 .upload-icon {
   width: 20px;
+}
+
+input[type="file"] {
+  display: none;
 }
 
 .filename-bar {
@@ -85,10 +91,12 @@ body {
   color: var(--amber-soft);
   padding: 10px 14px;
   border-radius: 10px;
-  cursor: pointer;
   font-family: monospace;
   font-size: 13px;
   letter-spacing: 0.05em;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .button {
@@ -99,7 +107,8 @@ body {
   font-weight: bold;
   font-size: 14px;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  text-transform: uppercase;
 }
 
 .processing-box {
@@ -135,4 +144,6 @@ body {
 
 .download-icon img {
   width: 20px;
+  height: 20px;
+  opacity: 0.85;
 }
