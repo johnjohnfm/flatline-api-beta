@@ -1,54 +1,83 @@
-const fileInput = document.getElementById("file-input");
-const fileNameDisplay = document.getElementById("file-name");
-const button = document.getElementById("neutralize-btn");
-const processingBox = document.getElementById("processing-box");
-const fillBar = document.querySelector(".progress-fill");
+// script.js
 
-fileInput.addEventListener("change", () => {
-  if (fileInput.files.length > 0) {
-    fileNameDisplay.textContent = fileInput.files[0].name;
-  }
-});
+document.addEventListener("DOMContentLoaded", () => {
+  const fileInput = document.getElementById("fileInput");
+  const uploadBtn = document.getElementById("uploadBtn");
+  const progressBar = document.getElementById("progressBar");
+  const progressFill = document.getElementById("progressFill");
+  const downloadBtn = document.getElementById("downloadBtn");
+  const fileNameDisplay = document.getElementById("fileName");
 
-button.addEventListener("click", async () => {
-  if (fileInput.files.length === 0) {
-    alert("Please select a .wav file to neutralize.");
-    return;
-  }
+  let downloadUrl = null;
 
-  const formData = new FormData();
-  formData.append("file", fileInput.files[0]);
+  fileInput.addEventListener("change", () => {
+    const file = fileInput.files[0];
+    if (file) {
+      fileNameDisplay.textContent = file.name;
+      downloadBtn.disabled = true;
+      downloadBtn.style.opacity = 0.5;
+    } else {
+      fileNameDisplay.textContent = "No file selected";
+    }
+  });
 
-  processingBox.style.display = "block";
-  fillBar.style.width = "0%";
-  setTimeout(() => fillBar.style.width = "100%", 100);
+  uploadBtn.addEventListener("click", () => {
+    const file = fileInput.files[0];
 
-  try {
-    const response = await fetch("https://flatline-api.onrender.com/neutralize/", {
-      method: "POST",
-      body: formData
-    });
-
-    if (!response.ok) {
-      throw new Error("Processing failed.");
+    if (!file) {
+      alert("Choose file first...");
+      return;
     }
 
-    const blob = await response.blob();
-    const url = URL.createObjectURL(blob);
+    const formData = new FormData();
+    formData.append("file", file);
+
+    progressBar.style.display = "block";
+    progressFill.style.width = "0%";
+
+    // Simulate progress while processing
+    let progress = 0;
+    const interval = setInterval(() => {
+      if (progress < 90) {
+        progress += 5;
+        progressFill.style.width = `${progress}%`;
+      }
+    }, 200);
+
+    fetch("https://flatline-api-beta.onrender.com/process", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Processing failed");
+        }
+        return response.blob();
+      })
+      .then((blob) => {
+        clearInterval(interval);
+        progressFill.style.width = "100%";
+
+        downloadUrl = URL.createObjectURL(blob);
+        downloadBtn.disabled = false;
+        downloadBtn.style.opacity = 1;
+      })
+      .catch((error) => {
+        clearInterval(interval);
+        console.error("Error:", error);
+        alert("Processing Failed.");
+        progressBar.style.display = "none";
+      });
+  });
+
+  downloadBtn.addEventListener("click", () => {
+    if (!downloadUrl) return;
 
     const a = document.createElement("a");
-    a.href = url;
-    a.download = "flatlined.wav";
+    a.href = downloadUrl;
+    a.download = "neutralized.wav";
     document.body.appendChild(a);
     a.click();
     a.remove();
-    URL.revokeObjectURL(url);
-
-    fileNameDisplay.textContent = "File processed and downloaded.";
-    fillBar.style.width = "100%";
-
-  } catch (error) {
-    alert("Error: " + error.message);
-    fillBar.style.width = "0%";
-  }
+  });
 });
