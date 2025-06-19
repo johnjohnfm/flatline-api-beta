@@ -1,79 +1,67 @@
 const fileInput = document.getElementById("fileUpload");
 const fileNameDisplay = document.getElementById("fileName");
 const processBtn = document.getElementById("processBtn");
-const downloadBtn = document.getElementById("downloadBtn");
 const progressBar = document.getElementById("progressBar");
 const progressFill = document.getElementById("progressFill");
 const statusText = document.getElementById("statusText");
+const downloadBtn = document.getElementById("downloadBtn");
 
 let selectedFile = null;
-let processedBlob = null;
+let flattenedBlob = null;
 
-// Display filename when user selects a file
 fileInput.addEventListener("change", () => {
-  if (fileInput.files.length > 0) {
-    selectedFile = fileInput.files[0];
-    fileNameDisplay.textContent = selectedFile.name;
-  }
+  selectedFile = fileInput.files[0];
+  fileNameDisplay.textContent = selectedFile ? selectedFile.name : "No file selected";
+  resetUI();
 });
 
-// Handle the "Neutralize" button click
-processBtn.addEventListener("click", async () => {
+processBtn.addEventListener("click", () => {
   if (!selectedFile) {
-    alert("Please choose a file first.");
+    statusText.textContent = "Please select a file.";
     return;
   }
 
-  // Initialize UI
   progressBar.classList.remove("hidden");
-  progressFill.style.width = "0%";
   statusText.textContent = "Processing...";
-  processBtn.disabled = true;
-  downloadBtn.classList.add("hidden");
+  progressFill.style.width = "0%";
 
-  try {
-    // Simulated progress animation (can be upgraded to reflect true progress)
-    let progress = 0;
-    const simulate = setInterval(() => {
-      if (progress < 90) {
-        progress += 10;
-        progressFill.style.width = progress + "%";
-      } else {
-        clearInterval(simulate);
-      }
-    }, 200);
+  const formData = new FormData();
+  formData.append("file", selectedFile);
 
-    const formData = new FormData();
-    formData.append("file", selectedFile);
-
-    const response = await fetch("https://flatline-api-beta.onrender.com/process", {
-      method: "POST",
-      body: formData,
+  fetch("https://flatline-api-beta.onrender.com/", {
+    method: "POST",
+    body: formData
+  })
+    .then(async (response) => {
+      if (!response.ok) throw new Error("Processing failed.");
+      const blob = await response.blob();
+      flattenedBlob = blob;
+      statusText.textContent = "Neutralization complete.";
+      downloadBtn.classList.remove("hidden");
+    })
+    .catch((err) => {
+      statusText.textContent = "Error: " + err.message;
+    })
+    .finally(() => {
+      progressFill.style.width = "100%";
     });
-
-    if (!response.ok) throw new Error("Processing failed");
-
-    const blob = await response.blob();
-    processedBlob = blob;
-
-    // Update UI on success
-    progressFill.style.width = "100%";
-    statusText.textContent = "Done!";
-    downloadBtn.classList.remove("hidden");
-  } catch (error) {
-    statusText.textContent = "Error: " + error.message;
-  } finally {
-    processBtn.disabled = false;
-  }
 });
 
-// Download processed audio file
 downloadBtn.addEventListener("click", () => {
-  if (!processedBlob) return;
-  const url = URL.createObjectURL(processedBlob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "neutralized.wav";
-  a.click();
-  URL.revokeObjectURL(url);
+  if (!flattenedBlob) return;
+  const url = URL.createObjectURL(flattenedBlob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "flatlined.wav";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 });
+
+function resetUI() {
+  downloadBtn.classList.add("hidden");
+  progressBar.classList.add("hidden");
+  progressFill.style.width = "0%";
+  statusText.textContent = "";
+  flattenedBlob = null;
+}
