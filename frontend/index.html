@@ -17,13 +17,15 @@
       </div>
     </header>
 
-    <label for="fileInput" class="upload-label" id="uploadLabel">
+    <div class="upload-label">
       <img src="Upload.png" alt="Upload Icon" class="upload-icon" />
       <span>UPLOAD FILE</span>
-    </label>
+    </div>
 
-    <input type="file" id="fileInput" hidden />
-    <div class="filename-bar" id="fileName">NO FILE SELECTED</div>
+    <label class="filename-bar" for="fileInput">
+      <input type="file" id="fileInput" hidden />
+      <span id="fileName">FILENAME.WAV</span>
+    </label>
 
     <button id="processBtn" class="button">NEUTRALIZE</button>
 
