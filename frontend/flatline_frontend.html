@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FLATLINE Web Plugin</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="aa-widget" role="main">
+    <section class="aa-header">
+      <h1 class="aa-title">FLATLINE</h1>
+      <p class="aa-subtitle">Neutralize Your Mix</p>
+    </section>
+
+    <section class="aa-upload" aria-labelledby="uploadLabel">
+      <label id="uploadLabel" class="aa-button aa-button--upload">
+        <img src="Upload.png" alt="Upload Icon" />
+        <span>Choose File</span>
+        <input type="file" id="fileUpload" accept=".wav,.mp3,.flac,.aiff" hidden />
+      </label>
+      <span id="fileName" class="aa-file-name">No file selected</span>
+    </section>
+
+    <section class="aa-process">
+      <button id="processBtn" class="aa-button aa-button--neutralize" aria-label="Start Neutralization"></button>
+    </section>
+
+    <section class="aa-progress" aria-live="polite">
+      <div id="progressBar" class="aa-progress-bar is-hidden">
+        <div id="progressFill" class="aa-progress-fill"></div>
+      </div>
+      <div id="statusText" class="aa-status-text"></div>
+    </section>
+
+    <section class="aa-download">
+      <button id="downloadBtn" class="aa-button aa-button--download is-hidden">
+        <img src="icon.png" alt="Download Icon" />
+        <span>Download</span>
+      </button>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

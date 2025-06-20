@@ -1,0 +1,169 @@
+
+/* ✅ AUTHENTIC AUDIO – FLATLINE Web UI Stylesheet Refactor */
+
+@font-face {
+  font-family: 'DINMittelschrift';
+  src: url('DINMittelschriftStd.otf') format('opentype');
+}
+@font-face {
+  font-family: 'DINEngschrift';
+  src: url('DINEngschriftStd.otf') format('opentype');
+}
+
+:root {
+  --aa-bg-panel: #DCDCDC;
+  --aa-text-main: #111111;
+  --aa-text-light: #F6F5F1;
+  --aa-black: #000000;
+  --aa-white: #FFFFFF;
+  --aa-amber: #FFBF00;
+  --aa-blue: #6EB3FF;
+  --aa-led-inactive: #005FCC;
+  --aa-radius-large: 12px;
+  --aa-radius-medium: 8px;
+  --aa-padding: 16px;
+  --aa-gap: 8px;
+  --aa-transition: 0.15s ease-in-out;
+}
+
+body {
+  font-family: 'DINMittelschrift', sans-serif;
+  background: url('panel-bg.png') center/cover no-repeat;
+  color: var(--aa-text-main);
+  margin: 0;
+  padding: var(--aa-padding);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.aa-widget {
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: var(--aa-padding);
+  border-radius: var(--aa-radius-large);
+  width: 360px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  text-align: center;
+  border: 1px solid var(--aa-black);
+}
+
+.aa-widget::before,
+.aa-widget::after {
+  content: "";
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background: url('screw.png') center/contain no-repeat;
+}
+.aa-widget::before {
+  top: -12px;
+  left: -12px;
+}
+.aa-widget::after {
+  bottom: -12px;
+  right: -12px;
+}
+
+.aa-title {
+  font-size: 26px;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+
+.aa-subtitle {
+  font-size: 12px;
+  margin-bottom: 24px;
+  color: var(--aa-led-inactive);
+}
+
+/* Buttons */
+
+.aa-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--aa-gap);
+  padding: 10px 16px;
+  border-radius: var(--aa-radius-medium);
+  font-family: 'DINEngschrift';
+  text-transform: uppercase;
+  font-size: 12px;
+  cursor: pointer;
+  transition: var(--aa-transition);
+}
+
+.aa-button--upload,
+.aa-button--download {
+  background-color: var(--aa-black);
+  color: var(--aa-text-light);
+  border: none;
+}
+.aa-button--upload:hover,
+.aa-button--download:hover {
+  background-color: #333;
+}
+.aa-button--upload:active,
+.aa-button--download:active {
+  transform: scale(0.97);
+}
+
+/* Neutralize Button (graphical) */
+.aa-button--neutralize {
+  background: url('neutralize-button.png') center/cover no-repeat;
+  border: none;
+  width: 200px;
+  height: 50px;
+  margin: 20px auto;
+  display: block;
+  cursor: pointer;
+  transition: var(--aa-transition);
+}
+.aa-button--neutralize:hover {
+  filter: brightness(1.1);
+}
+.aa-button--neutralize:active {
+  transform: scale(0.98);
+}
+
+/* Labels, Status, File */
+
+.aa-file-name,
+.aa-status-text {
+  font-size: 12px;
+  margin: 12px 0;
+  font-family: 'DINEngschrift';
+}
+
+/* Progress Bar */
+
+.aa-progress-bar {
+  background-color: #e5e5e5;
+  border-radius: var(--aa-radius-medium);
+  height: 8px;
+  width: 100%;
+  margin: 12px 0;
+  overflow: hidden;
+}
+.aa-progress-fill {
+  background-color: var(--aa-blue);
+  width: 0%;
+  height: 100%;
+  transition: width 0.3s ease-out;
+}
+
+/* Utility */
+
+.is-hidden {
+  display: none !important;
+}
+[aria-busy="true"] .aa-status-text::after {
+  content: " ⏳";
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
