@@ -1,0 +1,108 @@
+:root {
+  --aa-bg-panel: #f4f4f4;
+  --aa-text-main: #111;
+  --aa-text-light: #fff;
+  --aa-accent: #ffbf00;
+  --aa-accent-dark: #cc9900;
+  --aa-error: #d72638;
+  --aa-radius: 8px;
+  --aa-padding: 16px;
+  --aa-gap: 8px;
+  --aa-shadow: rgba(0, 0, 0, 0.1);
+}
+
+body {
+  font-family: 'DIN', 'Helvetica Neue', sans-serif;
+  background: var(--aa-bg-panel);
+  color: var(--aa-text-main);
+  margin: 0;
+  padding: var(--aa-padding);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.aa-widget {
+  background: var(--aa-text-light);
+  padding: var(--aa-padding);
+  border-radius: var(--aa-radius);
+  width: 360px;
+  box-shadow: 0 4px 12px var(--aa-shadow);
+  text-align: center;
+}
+
+.aa-title {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.aa-subtitle {
+  font-size: 12px;
+  margin-bottom: 24px;
+  color: #555;
+}
+
+.aa-upload-button,
+.aa-process-button,
+.aa-download-button {
+  background: var(--aa-accent);
+  color: var(--aa-text-main);
+  border: none;
+  padding: 12px 20px;
+  border-radius: var(--aa-radius);
+  font-weight: bold;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--aa-gap);
+  transition: background 0.2s ease;
+  box-shadow: 0 2px 4px var(--aa-shadow);
+}
+
+.aa-upload-button:hover,
+.aa-process-button:hover,
+.aa-download-button:hover {
+  background: var(--aa-accent-dark);
+}
+
+.aa-upload-button img,
+.aa-download-button img {
+  height: 18px;
+}
+
+.aa-file-name {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #333;
+  opacity: 0.7;
+}
+
+.aa-progress-bar {
+  width: 100%;
+  background: #e6e6e6;
+  height: 12px;
+  border-radius: var(--aa-radius);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.aa-progress-fill {
+  height: 100%;
+  background: var(--aa-accent);
+  width: 0%;
+  transition: width 0.4s ease;
+}
+
+.aa-status-text {
+  font-size: 12px;
+  color: #555;
+  min-height: 16px;
+  margin-bottom: 16px;
+}
+
+.is-hidden {
+  display: none !important;
+}
