@@ -1,1 +1,19 @@
-© 2025 JOHN E. REYNOLDS/JOHNJOHNFM. All rights reserved. This source code may not be copied, redistributed, or used in commercial or derivative works without explicit permission.
+© 2025 JOHN E. REYNOLDS / JOHNJOHNFM  
+All rights reserved.
+
+This software and its source code are provided for personal, educational, and non-commercial use only.
+
+You may:
+- View, study, and run the code for private use.
+- Clone or fork the repository for local experimentation.
+
+You may not:
+- Copy, sell, redistribute, or sublicense the code or any derivative works.
+- Use the code in commercial products, web services, plugins, or DAW tools without written permission.
+- Publish modified versions under your own name or brand.
+
+This project is NOT licensed under an open-source license (e.g., MIT, GPL).  
+Requests for commercial or collaborative use may be sent via [johnjohnfm.uk](https://johnjohnfm.uk).
+
+“Define your code. Design your sound.”  
+— FLATLINE by JOHNJOHNFM
